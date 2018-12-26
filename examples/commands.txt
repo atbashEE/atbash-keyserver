@@ -1,0 +1,30 @@
+====
+    Copyright 2018 Rudy De Busscher
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5205 -jar examples/app2/target/app2-microbundle.jar  --port 8280
+
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5105 -jar examples/app1/target/app1-microbundle.jar  --port 8180
+
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005 -jar examples/server/target/keys-server-microbundle.jar  --port 8080
+
+java -jar examples/app2/target/app2-microbundle.jar  --port 8280
+
+java -jar examples/app1/target/app1-microbundle.jar  --port 8180
+
+java -jar examples/server/target/keys-server-microbundle.jar  --port 8080
+
+
+http://localhost:8180/app1/client
