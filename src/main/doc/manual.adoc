@@ -13,7 +13,7 @@ Initial release - POC
 Code related to using the Diffie Hellman Algorithm.
 
 * impl\diffieHellman +
-   Code related to creating a shared symmetric Key from Public/private Key pairs. see **be.atbash.keys.diffiehillman.DHKeyExchangeManager**
+   Code related to creating a shared symmetric Key from Public/private Key pairs. see **be.atbash.keys.diffiehellman.DHKeyExchangeManager**
 
 * impl\keymanager-sign +
    Code for exchanging/creating keys behind the scene. +

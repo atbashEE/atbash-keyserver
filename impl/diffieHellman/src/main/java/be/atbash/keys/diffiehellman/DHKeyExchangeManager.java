@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package be.atbash.keys.diffiehillman;
+package be.atbash.keys.diffiehellman;
 
 import be.atbash.ee.security.octopus.keys.AtbashKey;
 import be.atbash.ee.security.octopus.keys.selector.AsymmetricPart;

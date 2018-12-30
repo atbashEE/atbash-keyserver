@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package be.atbash.keys.diffiehillman;
+package be.atbash.keys.diffiehellman;
 
 import be.atbash.ee.security.octopus.keys.AtbashKey;
 import be.atbash.json.annotate.JsonIgnore;
 import be.atbash.json.parser.MappedBy;
-import be.atbash.keys.diffiehillman.json.BobPublicDataJSONEncoder;
-import be.atbash.keys.diffiehillman.json.BobPublicDataWriter;
+import be.atbash.keys.diffiehellman.json.BobPublicDataJSONEncoder;
+import be.atbash.keys.diffiehellman.json.BobPublicDataWriter;
 
 import java.security.Key;
 import java.util.HashMap;

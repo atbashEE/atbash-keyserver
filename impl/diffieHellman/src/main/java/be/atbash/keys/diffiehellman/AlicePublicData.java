@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package be.atbash.keys.diffiehillman;
+package be.atbash.keys.diffiehellman;
 
 import be.atbash.json.parser.MappedBy;
-import be.atbash.keys.diffiehillman.json.AlicePublicDataJSONEncoder;
-import be.atbash.keys.diffiehillman.json.AlicePublicDataWriter;
+import be.atbash.keys.diffiehellman.json.AlicePublicDataJSONEncoder;
+import be.atbash.keys.diffiehellman.json.AlicePublicDataWriter;
 
 import javax.crypto.spec.DHParameterSpec;
 import java.math.BigInteger;

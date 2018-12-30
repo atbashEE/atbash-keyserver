@@ -19,9 +19,9 @@ import be.atbash.ee.security.octopus.jwt.decoder.JWTDecoder;
 import be.atbash.ee.security.octopus.jwt.encoder.JWTEncoder;
 import be.atbash.ee.security.octopus.jwt.parameter.JWTParameters;
 import be.atbash.ee.security.octopus.jwt.parameter.JWTParametersNone;
-import be.atbash.keys.diffiehillman.AlicePublicData;
-import be.atbash.keys.diffiehillman.BobPublicData;
-import be.atbash.keys.diffiehillman.DHKeyExchangeManager;
+import be.atbash.keys.diffiehellman.AlicePublicData;
+import be.atbash.keys.diffiehellman.BobPublicData;
+import be.atbash.keys.diffiehellman.DHKeyExchangeManager;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

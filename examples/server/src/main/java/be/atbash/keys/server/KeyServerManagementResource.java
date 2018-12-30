@@ -25,9 +25,9 @@ import be.atbash.ee.security.octopus.keys.AtbashKey;
 import be.atbash.ee.security.octopus.keys.selector.AsymmetricPart;
 import be.atbash.ee.security.octopus.keys.selector.SelectorCriteria;
 import be.atbash.ee.security.octopus.util.EncryptionHelper;
-import be.atbash.keys.diffiehillman.AlicePublicData;
-import be.atbash.keys.diffiehillman.BobPublicData;
-import be.atbash.keys.diffiehillman.DHKeyExchangeManager;
+import be.atbash.keys.diffiehellman.AlicePublicData;
+import be.atbash.keys.diffiehellman.BobPublicData;
+import be.atbash.keys.diffiehellman.DHKeyExchangeManager;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package be.atbash.keys.diffiehillman.json;
+package be.atbash.keys.diffiehellman.json;
 
 import be.atbash.json.writer.CustomBeanJSONEncoder;
-import be.atbash.keys.diffiehillman.BobPublicData;
+import be.atbash.keys.diffiehellman.BobPublicData;
 import be.atbash.util.base64.Base64Codec;
 import be.atbash.util.exception.AtbashUnexpectedException;
 

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package be.atbash.keys.diffiehillman.json;
+package be.atbash.keys.diffiehellman.json;
 
 import be.atbash.json.JSONObject;
 import be.atbash.json.writer.JSONWriter;
-import be.atbash.keys.diffiehillman.AlicePublicData;
+import be.atbash.keys.diffiehellman.AlicePublicData;
 import be.atbash.util.base64.Base64Codec;
 
 import java.io.IOException;
