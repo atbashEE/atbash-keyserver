@@ -20,20 +20,17 @@ import be.atbash.ee.security.octopus.keys.KeyManager;
 import be.atbash.ee.security.octopus.keys.generator.DHGenerationParameters;
 import be.atbash.ee.security.octopus.keys.generator.KeyGenerator;
 import be.atbash.ee.security.octopus.keys.selector.SelectorCriteria;
+import be.atbash.ee.security.octopus.keys.selector.filter.IdKeyFilter;
 import be.atbash.ee.security.octopus.keys.selector.filter.KeyFilter;
 import be.atbash.util.exception.AtbashIllegalActionException;
 
 import javax.crypto.spec.DHParameterSpec;
 import javax.enterprise.inject.Vetoed;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Vetoed
 public class DHKeyManager implements KeyManager {
 
-    private static final Object LOCK = new Object();
     private static DHKeyManager INSTANCE;
 
     private KeyGenerator keyGenerator;
@@ -83,18 +80,6 @@ public class DHKeyManager implements KeyManager {
 
     }
 
-    public static DHKeyManager getInstance() {
-        if (INSTANCE == null) {
-            synchronized (LOCK) {
-                if (INSTANCE == null) {
-                    INSTANCE = new DHKeyManager();
-                    INSTANCE.init();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
     public void storePublicKey(String tenantId, AtbashKey publicKey) {
         List<AtbashKey> atbashKeys = getKeysForTenantId(tenantId);
 
@@ -117,5 +102,38 @@ public class DHKeyManager implements KeyManager {
             keys.put(tenantId, atbashKeys);
         }
         return atbashKeys;
+    }
+
+    public void removeKeys(String tenantId, SelectorCriteria selectorCriteria) {
+        IdKeyFilter keyFilter = getKeyFilter(selectorCriteria.asKeyFilters());
+        Iterator<AtbashKey> iterator = keys.get(tenantId).iterator();
+        while(iterator.hasNext()) {
+            AtbashKey key = iterator.next();
+            if (key.getKeyId().endsWith(keyFilter.getKeyId())) {
+                iterator.remove();
+            }
+        }
+        if (keys.get(tenantId).isEmpty()) {
+            keys.remove(tenantId);
+        }
+    }
+
+    private IdKeyFilter getKeyFilter(List<KeyFilter> keyFilters) {
+        IdKeyFilter result = null;
+        for (KeyFilter keyFilter : keyFilters) {
+            if (keyFilter instanceof IdKeyFilter) {
+                result = (IdKeyFilter) keyFilter;
+            }
+        }
+        return result;
+    }
+
+
+    public static synchronized DHKeyManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DHKeyManager();
+            INSTANCE.init();
+        }
+        return INSTANCE;
     }
 }

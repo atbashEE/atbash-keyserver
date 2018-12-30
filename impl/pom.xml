@@ -36,6 +36,7 @@
 
     <properties>
         <atbash-rest-client.version>0.9-SNAPSHOT</atbash-rest-client.version>
+        <atbash-utils.version>0.9.3-SNAPSHOT</atbash-utils.version>
     </properties>
 
     <dependencies>

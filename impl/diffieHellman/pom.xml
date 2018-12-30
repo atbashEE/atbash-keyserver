@@ -54,6 +54,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- testing -->
+        <dependency>
+            <groupId>be.atbash.utils</groupId>
+            <artifactId>utils-se</artifactId>
+            <version>${atbash-utils.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

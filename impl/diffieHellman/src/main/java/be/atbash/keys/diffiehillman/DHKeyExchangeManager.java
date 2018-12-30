@@ -36,7 +36,6 @@ import java.util.*;
 @ApplicationScoped
 public class DHKeyExchangeManager {
 
-    private static final Object LOCK = new Object();
     private static DHKeyExchangeManager INSTANCE;
 
     private DHKeyManager dhKeyManager;
@@ -200,14 +199,23 @@ public class DHKeyExchangeManager {
         return result;
     }
 
-    public static DHKeyExchangeManager getInstance() {
+    public void removeKeys(String tenantId, String exchangeId) {
+        String keyId;
+        if (exchangeId.startsWith("alice")) {
+            keyId = exchangeId.substring(5);
+        } else {
+            // starts with bob
+            keyId = exchangeId.substring(3);
+        }
+
+        SelectorCriteria selectorCriteria = SelectorCriteria.newBuilder().withId(keyId).build();
+        dhKeyManager.removeKeys(tenantId, selectorCriteria);
+    }
+
+    public static synchronized DHKeyExchangeManager getInstance() {
         if (INSTANCE == null) {
-            synchronized (LOCK) {
-                if (INSTANCE == null) {
-                    INSTANCE = new DHKeyExchangeManager();
-                    INSTANCE.init();
-                }
-            }
+            INSTANCE = new DHKeyExchangeManager();
+            INSTANCE.init();
         }
         return INSTANCE;
     }
