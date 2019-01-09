@@ -1,6 +1,6 @@
 = Atbash Key Server
 Rudy De Busscher <rdebusscher@gmail.com>
-v0.5, ??/??/2018
+v0.5, 09/01/2019
 
 == Release notes
 

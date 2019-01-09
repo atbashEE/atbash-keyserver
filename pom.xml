@@ -23,7 +23,7 @@
 
     <groupId>be.atbash.keys</groupId>
     <artifactId>keys-server-parent</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <packaging>pom</packaging>
 
     <properties>
