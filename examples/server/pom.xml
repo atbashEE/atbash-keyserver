@@ -24,13 +24,13 @@
     <parent>
         <groupId>be.atbash.keys</groupId>
         <artifactId>keys-server-examples</artifactId>
-        <version>0.5</version>
+        <version>0.9-SNAPSHOT</version>
 
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>keys-server</artifactId>
-    <version>0.5</version>
+    <version>0.9-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
