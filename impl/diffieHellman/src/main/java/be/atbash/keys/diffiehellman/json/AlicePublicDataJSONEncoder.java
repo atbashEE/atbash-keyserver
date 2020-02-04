@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,16 @@
  */
 package be.atbash.keys.diffiehellman.json;
 
-import be.atbash.json.writer.CustomBeanJSONEncoder;
+import be.atbash.ee.security.octopus.nimbus.util.Base64URLValue;
+import be.atbash.ee.security.octopus.nimbus.util.JSONObjectUtils;
 import be.atbash.keys.diffiehellman.AlicePublicData;
-import be.atbash.util.base64.Base64Codec;
 import be.atbash.util.exception.AtbashUnexpectedException;
 
+import javax.json.JsonObject;
+import javax.json.bind.serializer.DeserializationContext;
+import javax.json.bind.serializer.JsonbDeserializer;
+import javax.json.stream.JsonParser;
+import java.lang.reflect.Type;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -28,34 +33,33 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.List;
 
-public class AlicePublicDataJSONEncoder extends CustomBeanJSONEncoder<AlicePublicData> {
+public class AlicePublicDataJSONEncoder implements JsonbDeserializer<AlicePublicData> {
 
     private static final List<String> PASSTHROUGH_KEYS = Arrays.asList("p", "g", "l", "kid");
-
-    public AlicePublicDataJSONEncoder() {
-        super(AlicePublicData.class);
-    }
-
-    @Override
-    protected void setCustomValue(AlicePublicData current, String key, Object value) {
-        if (PASSTHROUGH_KEYS.contains(key)) {
-            current.addProperty(key, value);
-        }
-        if ("publicKey".equals(key)) {
-            handlePublicKey(current, value.toString());
-        }
-
-    }
 
     private void handlePublicKey(AlicePublicData current, String value) {
         try {
             KeyFactory kf = KeyFactory.getInstance("DH");
-            X509EncodedKeySpec x509Spec = new X509EncodedKeySpec(Base64Codec.decode(value));
+            X509EncodedKeySpec x509Spec = new X509EncodedKeySpec(new Base64URLValue(value).decode());
             PublicKey pk = kf.generatePublic(x509Spec);
 
             current.addProperty("publicKey", pk);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new AtbashUnexpectedException(e);
         }
+    }
+
+    @Override
+    public AlicePublicData deserialize(JsonParser jsonParser, DeserializationContext ctx, Type rtType) {
+        JsonObject jsonObject = jsonParser.getObject();
+
+        AlicePublicData result = new AlicePublicData();
+        for (String passthroughKey : PASSTHROUGH_KEYS) {
+            Object obj = JSONObjectUtils.getJsonValueAsObject(jsonObject.get(passthroughKey));
+            result.addProperty(passthroughKey, obj);
+        }
+        result.setTenantId(jsonObject.getString("tenantId"));
+        handlePublicKey(result, jsonObject.getString("publicKey"));
+        return result;
     }
 }

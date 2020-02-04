@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class AliceBob implements Runnable {
             }
 
             JWTDecoder decoder = new JWTDecoder();
-            BobPublicData bobPublicData = decoder.decode(bobData, BobPublicData.class);
+            BobPublicData bobPublicData = decoder.decode(bobData, BobPublicData.class).getData();
 
 
             // Step 4 part 1:  Alice performs the first phase of the
@@ -103,7 +103,7 @@ public class AliceBob implements Runnable {
             }
 
             JWTDecoder decoder = new JWTDecoder();
-            AlicePublicData alicePublicData = decoder.decode(aliceData, AlicePublicData.class);
+            AlicePublicData alicePublicData = decoder.decode(aliceData, AlicePublicData.class).getData();
 
             BobPublicData bobPublicData = exchangeManager.acknowledgeExchange(alicePublicData);
 

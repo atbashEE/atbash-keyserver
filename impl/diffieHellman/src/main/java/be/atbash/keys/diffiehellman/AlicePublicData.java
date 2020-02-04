@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,10 @@
  */
 package be.atbash.keys.diffiehellman;
 
-import be.atbash.json.parser.MappedBy;
-import be.atbash.keys.diffiehellman.json.AlicePublicDataJSONEncoder;
-import be.atbash.keys.diffiehellman.json.AlicePublicDataWriter;
-
 import javax.crypto.spec.DHParameterSpec;
 import java.math.BigInteger;
 
-@MappedBy(writer = AlicePublicDataWriter.class, beanEncoder = AlicePublicDataJSONEncoder.class)
+
 public class AlicePublicData extends BobPublicData {
 
     private DHParameterSpec dhParameterSpec;
@@ -31,9 +27,10 @@ public class AlicePublicData extends BobPublicData {
     public DHParameterSpec getDhParameterSpec() {
         if (dhParameterSpec == null) {
             // FIXME validate if properties are present in map and have correct type
-            // This to cover the fact that g is probably a Integer in the properties due to the smaller value.
+            // This to cover the fact that p and g are not in the correct type (int or BigDecimal)
             BigInteger gValue = new BigInteger(properties.get("g").toString());
-            dhParameterSpec = new DHParameterSpec((BigInteger) properties.get("p"), gValue, (int) properties.get("l"));
+            BigInteger pValue = new BigInteger(properties.get("p").toString());
+            dhParameterSpec = new DHParameterSpec(pValue, gValue, (int) properties.get("l"));
         }
         return dhParameterSpec;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import be.atbash.keys.diffiehellman.DHKeyExchangeManager;
 import be.atbash.keys.manager.sign.config.KeyManagerConfiguration;
 import be.atbash.keys.manager.sign.rest.KeyServerManagementService;
 import be.atbash.util.exception.AtbashUnexpectedException;
-import org.eclipse.microprofile.rest.client.AbstractRestClientBuilder;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 import javax.crypto.SecretKey;
 import java.net.MalformedURLException;
@@ -52,21 +52,21 @@ public class KeyRequester {
         String aliceData = getEncodedData(alicePublicData);
 
         try {
-            KeyServerManagementService service = AbstractRestClientBuilder.newBuilder()
+            KeyServerManagementService service = RestClientBuilder.newBuilder()
                     .baseUrl(new URL(keyServerRootUrl))
                     .build(KeyServerManagementService.class);
 
             String bobData = service.startExchange(aliceData);
 
             JWTDecoder decoder = new JWTDecoder();
-            BobPublicData bobPublicData = decoder.decode(bobData, BobPublicData.class);
+            BobPublicData bobPublicData = decoder.decode(bobData, BobPublicData.class).getData();
 
             String encryptedKey = service.newKey(alicePublicData.getPublicKey().getKeyId());
 
             SecretKey secretKey = exchangeManager.defineSecretKey(bobPublicData.getPublicKey());
 
             String key = EncryptionHelper.decode(encryptedKey, secretKey);
-            return new JWTDecoder().decode(key, AtbashKey.class);
+            return new JWTDecoder().decode(key, AtbashKey.class).getData();
 
         } catch (MalformedURLException e) {
             // Not entirely correct.  But when moved to config, it is no issue

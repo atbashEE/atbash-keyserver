@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,16 @@
 package be.atbash.keys.diffiehellman;
 
 import be.atbash.ee.security.octopus.keys.AtbashKey;
-import be.atbash.json.annotate.JsonIgnore;
-import be.atbash.json.parser.MappedBy;
-import be.atbash.keys.diffiehellman.json.BobPublicDataJSONEncoder;
-import be.atbash.keys.diffiehellman.json.BobPublicDataWriter;
 
 import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
-@MappedBy(writer = BobPublicDataWriter.class, beanEncoder = BobPublicDataJSONEncoder.class)
+
 public class BobPublicData {
 
     private String tenantId;
-    @JsonIgnore  // So that our beanEncoder gets the change to handle this field.
+
     private AtbashKey publicKey;
 
     protected Map<String, Object> properties = new HashMap<>();

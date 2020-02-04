@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,17 @@ import be.atbash.ee.security.octopus.keys.generator.DHGenerationParameters;
 import be.atbash.ee.security.octopus.keys.generator.KeyGenerator;
 import be.atbash.ee.security.octopus.keys.selector.AsymmetricPart;
 import be.atbash.ee.security.octopus.keys.selector.filter.AsymmetricPartKeyFilter;
-import be.atbash.json.JSONObject;
-import be.atbash.json.JSONValue;
-import be.atbash.util.base64.Base64Codec;
+import be.atbash.ee.security.octopus.nimbus.util.Base64URLValue;
 import be.atbash.util.exception.AtbashUnexpectedException;
 import org.junit.Test;
 
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.DHParameterSpec;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.StringReader;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -60,14 +63,17 @@ public class AlicePublicDataTest {
         JWTEncoder encoder = new JWTEncoder();
         String json = encoder.encode(data, parameters);
 
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(json);
-        assertThat(jsonObject.getAsString("tenantId")).isEqualTo("someTenant");
-        assertThat(jsonObject.getAsString("kid")).isEqualTo("kidValue");
-        assertThat(jsonObject.getAsString("p")).isEqualTo("179769313486231590770839156793787453197860296048756011706444423684197180216158519368947833795864925541502180565485980503646440548199239100050792877003355816639229553136239076508735759914822574862575007425302077447712589550957937778424442426617334727629299387668709205606050270810842907692932019128194467627007");
-        assertThat(jsonObject.getAsString("g")).isEqualTo("2");
-        assertThat(jsonObject.getAsString("l")).isEqualTo("512");
+        JsonReader reader = Json.createReader(new StringReader(json));
+        JsonObject jsonObject = reader.readObject();
+        reader.close();
 
-        byte[] bytes = Base64Codec.decode(jsonObject.getAsString("publicKey"));
+        assertThat(jsonObject.getString("tenantId")).isEqualTo("someTenant");
+        assertThat(jsonObject.getString("kid")).isEqualTo("kidValue");
+        assertThat(jsonObject.getJsonNumber("p").bigDecimalValue()).isEqualTo(new BigDecimal("179769313486231590770839156793787453197860296048756011706444423684197180216158519368947833795864925541502180565485980503646440548199239100050792877003355816639229553136239076508735759914822574862575007425302077447712589550957937778424442426617334727629299387668709205606050270810842907692932019128194467627007"));
+        assertThat(jsonObject.getJsonNumber("g").intValue()).isEqualTo(2);
+        assertThat(jsonObject.getJsonNumber("l").intValue()).isEqualTo(512);
+
+        byte[] bytes = new Base64URLValue(jsonObject.getString("publicKey")).decode();
 
         KeyFactory kf = KeyFactory.getInstance("DH");
         X509EncodedKeySpec x509Spec = new X509EncodedKeySpec(bytes);
@@ -82,7 +88,7 @@ public class AlicePublicDataTest {
     public void decodeData() {
         String json = "{\"kid\":\"kidValue\",\"p\":179769313486231590770839156793787453197860296048756011706444423684197180216158519368947833795864925541502180565485980503646440548199239100050792877003355816639229553136239076508735759914822574862575007425302077447712589550957937778424442426617334727629299387668709205606050270810842907692932019128194467627007,\"g\":2,\"tenantId\":\"someTenant\",\"publicKey\":\"MIIBIzCBmQYJKoZIhvcNAQMBMIGLAoGBAP__________yQ_aoiFowjTExmKLgNwc0SkCTgiKZ8x0Agu-pjsTmyJRSgh5jjQE3e-VGbPNOkMbMCsKbfJfFDdP4TVtbVHCReSFtXZiXn7G9ExC6aY37WsL_1y29Aa37e44a_taiZ-lrp8kEXxLH-ZJKGZR7OZTgf__________AgECAgICAAOBhAACgYA-VxU_A7WIOmH0MoB7LKWukfvxhbn7oZGdiU9UL-O7rn9ek6iBVY4h2NcqD0vUBAsPFAsj-D_VM_-uAlWH983hLeGDQ4meRpIy4APiZFZzOkwkZejTw4bL2uWpNIkhwdtBMxpnMxuWnw-nFMUeXaXuRJ9LBj3NP9mB4JYLnyNI2A\",\"l\":512}";
         JWTDecoder decoder = new JWTDecoder();
-        AlicePublicData data = decoder.decode(json, AlicePublicData.class);
+        AlicePublicData data = decoder.decode(json, AlicePublicData.class).getData();
 
         assertThat(data.getTenantId()).isEqualTo("someTenant");
         assertThat(data.getDhParameterSpec().getP()).isEqualTo(new BigInteger("179769313486231590770839156793787453197860296048756011706444423684197180216158519368947833795864925541502180565485980503646440548199239100050792877003355816639229553136239076508735759914822574862575007425302077447712589550957937778424442426617334727629299387668709205606050270810842907692932019128194467627007"));

@@ -15,29 +15,16 @@
  */
 package be.atbash.keys.server.example.app2;
 
-import be.atbash.ee.security.octopus.jwt.decoder.JWTData;
-import be.atbash.ee.security.octopus.jwt.decoder.JWTDecoder;
-import be.atbash.ee.security.octopus.keys.selector.KeySelector;
+import be.atbash.ee.security.octopus.keys.RemoteJWKSetURIValidator;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import java.net.URI;
 
-@Path("/test")
 @ApplicationScoped
-public class TestResource {
+public class TestRemoteJWKSetURIValidator implements RemoteJWKSetURIValidator {
 
-    @Inject
-    private JWTDecoder jwtDecoder;
-
-    @Inject
-    private KeySelector keySelector;
-
-    @POST
-    public String doSomeTest(String data) {
-        JWTData<TestData> jwtData = jwtDecoder.decode(data, TestData.class, keySelector, null);
-
-        return jwtData.getData().getName() + " - " + jwtData.getData().getAge();
+    @Override
+    public boolean isValid(URI uri) {
+        return uri.toASCIIString().startsWith("http://localhost");
     }
 }

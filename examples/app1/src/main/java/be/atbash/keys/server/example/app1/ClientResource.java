@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import be.atbash.ee.security.octopus.keys.AtbashKey;
 import be.atbash.ee.security.octopus.keys.selector.AsymmetricPart;
 import be.atbash.ee.security.octopus.keys.selector.KeySelector;
 import be.atbash.ee.security.octopus.keys.selector.SelectorCriteria;
-import org.eclipse.microprofile.rest.client.AbstractRestClientBuilder;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -61,7 +61,7 @@ public class ClientResource {
         String result = null;
 
         try {
-            TestService testService = AbstractRestClientBuilder.newBuilder().baseUrl(new URL("http://localhost:8280/app2"))
+            TestService testService = RestClientBuilder.newBuilder().baseUrl(new URL("http://localhost:8280/app2"))
                     .build(TestService.class);
 
             result = testService.doTest(encoded);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2018-2019 Rudy De Busscher
+    Copyright 2018-2020 Rudy De Busscher
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,16 +54,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.eclipse.microprofile.rest.client</groupId>
+            <artifactId>microprofile-rest-client-api</artifactId>
+            <version>1.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>be.atbash.keys</groupId>
             <artifactId>diffie-hellman</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>be.atbash.mp.rest-client</groupId>
-            <artifactId>atbash-rest-client-impl</artifactId>
-            <version>${atbash-rest-client.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

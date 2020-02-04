@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2018-2019 Rudy De Busscher
+    Copyright 2018-2020 Rudy De Busscher
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -35,11 +35,27 @@
 
 
     <properties>
-        <atbash-rest-client.version>0.9-SNAPSHOT</atbash-rest-client.version>
-        <atbash-utils.version>0.9.3-SNAPSHOT</atbash-utils.version>
+        <atbash-utils.version>1.0.0-SNAPSHOT</atbash-utils.version>
+        <javax.json.bind.version>1.0</javax.json.bind.version>
+        <javax.json.version>1.1</javax.json.version>
+
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.json.bind</groupId>
+            <artifactId>javax.json.bind-api</artifactId>
+            <version>${javax.json.bind.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>${javax.json.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- test dependencies-->
         <dependency>
             <groupId>junit</groupId>
@@ -62,7 +78,19 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <modules>

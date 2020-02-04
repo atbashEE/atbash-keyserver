@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 package be.atbash.keys.diffiehellman.json;
 
-import be.atbash.json.JSONObject;
-import be.atbash.json.writer.JSONWriter;
 import be.atbash.keys.diffiehellman.AlicePublicData;
-import be.atbash.util.base64.Base64Codec;
 
-import java.io.IOException;
+import javax.json.bind.serializer.JsonbSerializer;
+import javax.json.bind.serializer.SerializationContext;
+import javax.json.stream.JsonGenerator;
+import java.util.Base64;
 
-public class AlicePublicDataWriter implements JSONWriter<AlicePublicData> {
+public class AlicePublicDataWriter implements JsonbSerializer<AlicePublicData> {
 
     @Override
-    public <E extends AlicePublicData> void writeJSONString(E value, Appendable out) throws IOException {
-        JSONObject result = new JSONObject();
-        result.appendField("tenantId", value.getTenantId());
-        result.appendField("kid", value.getPublicKey().getKeyId());
-        result.appendField("publicKey", Base64Codec.encodeToString(value.getPublicKey().getKey().getEncoded(), true));
-        result.appendField("p", value.getDhParameterSpec().getP());
-        result.appendField("g", value.getDhParameterSpec().getG());
-        result.appendField("l", value.getDhParameterSpec().getL());
+    public void serialize(AlicePublicData alicePublicData, JsonGenerator jsonGenerator, SerializationContext ctx) {
+        jsonGenerator.writeStartObject()
+                .write("tenantId", alicePublicData.getTenantId())
+                .write("kid", alicePublicData.getPublicKey().getKeyId())
+                .write("publicKey", Base64.getUrlEncoder().withoutPadding().encodeToString(alicePublicData.getPublicKey().getKey().getEncoded()))
+                .write("p", alicePublicData.getDhParameterSpec().getP())
+                .write("g", alicePublicData.getDhParameterSpec().getG())
+                .write("l", alicePublicData.getDhParameterSpec().getL())
+                .writeEnd();
 
-        result.writeJSONString(out);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import be.atbash.ee.security.octopus.jwt.parameter.JWTParameterHeaderDefaultProv
 import be.atbash.keys.manager.sign.config.KeyManagerConfiguration;
 import be.atbash.util.ordered.Order;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class JKUJWTParameterHeaderDefaultProvider implements JWTParameterHeaderD
     @Override
     public Map<String, Object> defaultHeaderValues() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("jku", jkuURL);
+        result.put("jku", URI.create(jkuURL));
         return result;
     }
 }

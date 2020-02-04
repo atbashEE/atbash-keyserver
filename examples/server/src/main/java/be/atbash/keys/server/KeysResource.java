@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Rudy De Busscher
+ * Copyright 2018-2020 Rudy De Busscher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import be.atbash.ee.security.octopus.keys.selector.AsymmetricPart;
 import be.atbash.ee.security.octopus.keys.selector.SelectorCriteria;
 import be.atbash.ee.security.octopus.keys.writer.KeyEncoderParameters;
 import be.atbash.ee.security.octopus.keys.writer.KeyWriterFactory;
+import be.atbash.ee.security.octopus.nimbus.jwk.JWK;
+import be.atbash.ee.security.octopus.nimbus.jwk.JWKSet;
 import be.atbash.util.exception.AtbashUnexpectedException;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -69,9 +69,9 @@ public class KeysResource {
 
                 jwkList.add(JWK.parse(new String(bytes)));
             }
-        } catch (IOException | ParseException e) {
+        } catch (ParseException e) {
             throw new AtbashUnexpectedException(e);
         }
-        return new JWKSet(jwkList).toJSONObject().toJSONString();
+        return new JWKSet(jwkList).toJSONObject().toString();
     }
 }
